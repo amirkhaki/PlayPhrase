@@ -52,9 +52,23 @@
           nativeBuildInputs = with pkgs; [
             pkg-config
             makeWrapper
+            copyDesktopItems
           ];
           
           buildInputs = runtimeDeps;
+          
+          desktopItems = [
+            (pkgs.makeDesktopItem {
+              name = "playphrase";
+              exec = "PlayPhrase";
+              desktopName = "PlayPhrase";
+              genericName = "Video Phrase Search";
+              comment = "Search and play video clips by phrase";
+              categories = [ "AudioVideo" "Video" "Player" ];
+              keywords = [ "video" "phrase" "search" "clips" ];
+              startupWMClass = "playphrase";
+            })
+          ];
           
           extraWrapProgramArgs = ''
             --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath runtimeDeps}
