@@ -50,3 +50,39 @@ jobs:
         with:
           name: PlayPhrase-Linux-x64
           path: PlayPhrase-Linux-x64.tar.gz
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        run: flutter build windows --release
+
+      - name: Create archive
+        run: |
+          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath PlayPhrase-Windows-x64.zip
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'release'
+        with:
+          files: PlayPhrase-Windows-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifact (for manual runs)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlayPhrase-Windows-x64
+          path: PlayPhrase-Windows-x64.zip
