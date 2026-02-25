@@ -83,7 +83,7 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = buildDeps ++ [ pkgs.chromium pkgs.mesa-demos ];
+          buildInputs = buildDeps ++ [ pkgs.chromium pkgs.mesa-demos pkgs.bashInteractive ];
           
           shellHook = ''
             export CHROME_EXECUTABLE="${pkgs.chromium}/bin/chromium"
